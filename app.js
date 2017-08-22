@@ -73,7 +73,7 @@ app.post('/contact',function(req,res){
 
   mailOpts = {
       from: req.body.name + ' &lt;' + req.body.email + '&gt;', //grab form data from the request body object
-      to: 'nicholis.dutoit@gmail.com',
+      to: loginconfig.emailto,
       subject: 'Website contact form',
       text: 'Message from: ' + req.body.name + ' ('+req.body.email+') \n' + req.body.message
   };
