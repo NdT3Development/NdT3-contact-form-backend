@@ -38,6 +38,7 @@ var apiRatelimiter = new RateLimit({
   max: 5, // start blocking after 5 requests
   delayAfter: 0, // disable slow down of requests
   delayMs: 0,
+  headers: true,
   handler: function (req, res, options) {
     res.setHeader('Retry-After', Math.ceil(options.windowMs / 1000));
     res.json({"responseCode": 1, "responseDesc": "Ratelimited (too many requests)"});
