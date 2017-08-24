@@ -33,9 +33,9 @@ smtpTrans.verify(function(error, success) {
 
 
 var apiRatelimiter = new RateLimit({
-  windowMs: 60*1000, // 1 minute window
+  windowMs: 7500, // 7.5 second window
   max: 5, // start blocking after 5 requests
-  message: "Too many accounts created from this IP, please try again after a minute"
+  message: "Ratelimited"
 });
 
 app.get('/onlinecheck', apiRatelimiter, function(req,res) {
