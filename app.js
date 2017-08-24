@@ -58,7 +58,7 @@ app.get('/check.png', function(req, res) {
 });
 
 app.post('/contact', apiRatelimiter, function(req,res){
-  res.header('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   if (!req.body['name'] || !req.body['email'] || !req.body['message']) {
     return res.json({"responseCode": 1, "responseDesc": "All fields are required"});
   }
