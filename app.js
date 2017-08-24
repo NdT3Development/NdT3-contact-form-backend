@@ -31,13 +31,14 @@ smtpTrans.verify(function(error, success) {
  }
 });
 
+function ratelimitedResponse(req, res, options) {
+  res.json({"responseCode": 1, "responseDesc": "Ratelimited (too many requests)"}),
+}
 
 var apiRatelimiter = new RateLimit({
   windowMs: 7500, // 7.5 second window
   max: 5, // start blocking after 5 requests
-  onLimitReached: function (req, res, options) {
-    res.json({"responseCode": 1, "responseDesc": "Ratelimited (too many requests)"}),
-  }
+  onLimitReached: ratelimitedResponse()
 });
 
 app.get('/onlinecheck', apiRatelimiter, function(req,res) {
