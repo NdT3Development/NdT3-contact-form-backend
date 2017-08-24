@@ -4,10 +4,30 @@ var request = require('request');
 var nodemailer = require('nodemailer');
 var path = require('path');
 var logger = require('morgan');
-var client = require('redis').createClient()
-var limiter = require('express-limiter')(app, client)
 var app = express();
 var loginconfig = require('./loginconfig.json');
+
+
+var client = require('redis').createClient()
+
+var limiter = require('express-limiter')(app, client)
+
+/**
+ * you may also pass it an Express 4.0 `Router`
+ *
+ * router = express.Router()
+ * limiter = require('express-limiter')(router, client)
+ */
+
+limiter({
+  path: '/onlinecheck',
+  method: 'get',
+  lookup: ['connection.remoteAddress'],
+  // 150 requests per hour
+  total: 150,
+  expire: 1000 * 60 * 60
+})
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
@@ -34,8 +54,8 @@ smtpTrans.verify(function(error, success) {
 
 
 limiter({
-  path: '/onlinecheck',
-  method: 'get',
+  path: '*',
+  method: 'all',
   lookup: 'connection.remoteAddress',
   onRateLimited: function (req, res, next) {
     next({ message: 'Rate limit exceeded', status: 429 })
