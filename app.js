@@ -36,6 +36,8 @@ smtpTrans.verify(function(error, success) {
 var apiRatelimiter = new RateLimit({
   windowMs: 7500, // 7.5 second window
   max: 5, // start blocking after 5 requests
+  delayAfter: 0, // disable slow down of requests
+  delayMs: 0, 
   onLimitReached: function (req, res, options) {
     res.json({"responseCode": 1, "responseDesc": "Ratelimited (too many requests)"});
   }
