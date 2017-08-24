@@ -35,7 +35,7 @@ smtpTrans.verify(function(error, success) {
 var apiRatelimiter = new RateLimit({
   windowMs: 7500, // 7.5 second window
   max: 5, // start blocking after 5 requests
-  message: {"responseCode": 1, "responseDesc": "Ratelmited (too many requests)"}
+  message: JSON.stringify({"responseCode": 1, "responseDesc": "Ratelimited (too many requests)"});
 });
 
 app.get('/onlinecheck', apiRatelimiter, function(req,res) {
