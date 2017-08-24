@@ -4,6 +4,9 @@ var request = require('request');
 var nodemailer = require('nodemailer');
 var path = require('path');
 var logger = require('morgan');
+var Limiter = require('express-rate-limiter');
+var MemoryStore = require('express-rate-limiter/lib/memoryStore');
+var limiter = new Limiter({ db : new MemoryStore() });
 var app = express();
 var loginconfig = require('./loginconfig.json');
 
@@ -30,7 +33,7 @@ smtpTrans.verify(function(error, success) {
  }
 });
 
-app.get('/onlinecheck',function(req,res) {
+app.get('/onlinecheck', limiter.middleware(), function(req,res) { // Ratelimit here for testing
   // Sending our HTML file to browser.
   res.end('Well, well, well, look who we have here. You shouldn\'t be here...');
   //res.status(403).end('403 Forbidden\nYou shouldn\'t be here');
@@ -41,7 +44,7 @@ app.get('/check.png', function(req, res) {
   res.sendFile(reqPath);
 });
 
-app.post('/contact',function(req,res){
+app.post('/contact', limiter.middleware(), function(req,res){
   res.header('Access-Control-Allow-Origin', '*');
   if (!req.body['name'] || !req.body['email'] || !req.body['message']) {
     return res.json({"responseCode": 1, "responseDesc": "All fields are required"});
