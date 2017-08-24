@@ -38,7 +38,7 @@ var apiRatelimiter = new RateLimit({
   max: 5, // start blocking after 5 requests
   delayAfter: 0, // disable slow down of requests
   delayMs: 0,
-  handler: function (req, res, /*next*/) {
+  handler: function (req, res, options) {
     if (options.headers) {
       res.setHeader('Retry-After', Math.ceil(options.windowMs / 1000));
     }
