@@ -4,30 +4,9 @@ var request = require('request');
 var nodemailer = require('nodemailer');
 var path = require('path');
 var logger = require('morgan');
+var RateLimit = require('express-rate-limit');
 var app = express();
 var loginconfig = require('./loginconfig.json');
-
-
-var client = require('redis').createClient()
-
-var limiter = require('express-limiter')(app, client)
-
-/**
- * you may also pass it an Express 4.0 `Router`
- *
- * router = express.Router()
- * limiter = require('express-limiter')(router, client)
- */
-
-limiter({
-  path: '/onlinecheck',
-  method: 'get',
-  lookup: ['connection.remoteAddress'],
-  // 150 requests per hour
-  total: 150,
-  expire: 1000 * 60 * 60
-})
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
@@ -53,17 +32,13 @@ smtpTrans.verify(function(error, success) {
 });
 
 
-limiter({
-  path: '*',
-  method: 'all',
-  lookup: 'connection.remoteAddress',
-  onRateLimited: function (req, res, next) {
-    next({ message: 'Rate limit exceeded', status: 429 })
-  }
-})
+var apiRatelimiter = new RateLimit({
+  windowMs: 60*1000, // 1 minute window
+  max: 5, // start blocking after 5 requests
+  message: "Too many accounts created from this IP, please try again after a minute"
+});
 
-
-app.get('/onlinecheck',function(req,res) {
+app.get('/onlinecheck', apiRatelimiter, function(req,res) {
   // Sending our HTML file to browser.
   res.end('Well, well, well, look who we have here. You shouldn\'t be here...');
   //res.status(403).end('403 Forbidden\nYou shouldn\'t be here');
