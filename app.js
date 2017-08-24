@@ -34,13 +34,14 @@ smtpTrans.verify(function(error, success) {
 
 
 var apiRatelimiter = new RateLimit({
-  windowMs: 7500, // 8 second window
+  windowMs: 7500, // 7.5 second window
   max: 5, // start blocking after 5 requests
   delayAfter: 0, // disable slow down of requests
   delayMs: 0,
   headers: true,
   handler: function (req, res) {
-      res.setHeader('Retry-After', (7500 / 1000));
+    res.header('Access-Control-Allow-Origin', '*');
+    res.setHeader('Retry-After', (7500 / 1000));
     res.json({"responseCode": 1, "responseDesc": "Ratelimited (too many requests)"});
   }
 });
