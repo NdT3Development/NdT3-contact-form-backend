@@ -45,7 +45,7 @@ var apiRatelimiter = new RateLimit({
   }
 });
 
-app.get('/onlinecheck', apiRatelimiter, function(req,res) {
+app.get('/onlinecheck', function(req,res) {
   // Sending our HTML file to browser.
   res.end('Well, well, well, look who we have here. You shouldn\'t be here...');
   //res.status(403).end('403 Forbidden\nYou shouldn\'t be here');
@@ -56,7 +56,7 @@ app.get('/check.png', function(req, res) {
   res.sendFile(reqPath);
 });
 
-app.post('/contact',function(req,res){
+app.post('/contact', apiRatelimiter, function(req,res){
   res.header('Access-Control-Allow-Origin', '*');
   if (!req.body['name'] || !req.body['email'] || !req.body['message']) {
     return res.json({"responseCode": 1, "responseDesc": "All fields are required"});
