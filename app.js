@@ -32,7 +32,7 @@ smtpTrans.verify(function(error, success) {
 });
 
 function ratelimitedResponse(req, res, options) {
-  res.json({"responseCode": 1, "responseDesc": "Ratelimited (too many requests)"}),
+  res.json({"responseCode": 1, "responseDesc": "Ratelimited (too many requests)"});
 }
 
 var apiRatelimiter = new RateLimit({
