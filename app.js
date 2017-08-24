@@ -34,8 +34,8 @@ smtpTrans.verify(function(error, success) {
 
 
 limiter({
-  path: '*',
-  method: 'all',
+  path: '/onlinecheck',
+  method: 'get',
   lookup: 'connection.remoteAddress',
   onRateLimited: function (req, res, next) {
     next({ message: 'Rate limit exceeded', status: 429 })
