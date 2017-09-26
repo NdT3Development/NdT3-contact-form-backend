@@ -7,3 +7,5 @@ My website is currently hosted on GitHub Pages, which allows for static site hos
 **This is provided here only for people who want to see how this was done. NO SUPPORT WILL BE GIVEN IF YOU ATTEMPT TO SELF-HOST THIS**
 
 This repository is used by me to easily transfer file changes to my server so there may be frequent commits. **These may break the entire application at any time.**
+
+Code for the reCaptcha part of the back-end used was from [this tutorial](https://codeforgeek.com/2016/03/google-recaptcha-node-js-tutorial/)
