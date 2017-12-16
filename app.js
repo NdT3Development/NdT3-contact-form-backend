@@ -40,7 +40,7 @@ var apiRatelimiter = new RateLimit({
   delayMs: 0,
   headers: true,
   handler: function (req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    //res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Retry-After', (7500 / 1000));
     res.json({"responseCode": 1, "responseDesc": "Ratelimited (too many requests)"});
   }
@@ -58,7 +58,7 @@ app.get('/check.png', function(req, res) {
 });
 
 app.post('/contact', apiRatelimiter, function(req,res){
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  //res.setHeader('Access-Control-Allow-Origin', '*');
   if (!req.body['name'] || !req.body['email'] || !req.body['message']) {
     return res.json({"responseCode": 1, "responseDesc": "All fields are required"});
   }
